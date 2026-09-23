@@ -3,109 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>etctermux - Kali 风格白帽安全终端</title>
-<meta name="description" content="etctermux：基于 Termux 深度定制的 Kali 风格白帽安全测试终端，内置镜像切换、工具菜单、正版签名校验。">
+<title>etctermux · com.termux.etc - Kali 风格白帽安全终端</title>
+<meta name="description" content="etctermux（标识 com.termux.etc）：基于 Termux 深度定制的 Kali 风格白帽安全测试终端。内置 Kali 常用工具集离线预装、开箱即用，镜像源切换、sudo 模拟、AI 帮助、正版签名校验。">
+<link rel="icon" type="image/png" href="favicon.png">
 <style>
-  :root { --bg:#0a0e0a; --panel:#111711; --green:#2fe04e; --red:#e0243c; --yellow:#ffd400; --text:#c8e6c9; --dim:#7fa884; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:"JetBrains Mono","Cascadia Code",Consolas,"Noto Sans SC",monospace,sans-serif; line-height:1.7; }
-  a { color:var(--green); text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  .wrap { max-width:960px; margin:0 auto; padding:0 20px; }
-  header { padding:40px 0 20px; text-align:center; }
-  .banner { color:var(--green); font-size:14px; white-space:pre; overflow-x:auto; }
-  h1 { font-size:34px; margin:10px 0 6px; color:#fff; }
-  .tag { color:var(--yellow); font-size:15px; }
-  nav { text-align:center; padding:16px 0; border-bottom:1px solid #1d2a1d; }
-  nav a { margin:0 14px; font-size:14px; }
-  section { padding:34px 0; border-bottom:1px solid #1d2a1d; }
-  h2 { color:var(--green); font-size:22px; margin-bottom:14px; }
-  h2::before { content:"# "; color:var(--red); }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
-  .card { background:var(--panel); border:1px solid #1f2e1f; border-radius:8px; padding:16px; }
-  .card h3 { color:var(--yellow); font-size:15px; margin-bottom:8px; }
-  .card p { font-size:13px; color:var(--text); }
-  .dl { background:var(--panel); border:1px solid #1f2e1f; border-radius:8px; padding:18px; margin-bottom:12px; }
-  .dl h3 { color:var(--green); font-size:16px; margin-bottom:6px; }
-  .dl p { font-size:13px; color:var(--dim); margin-bottom:8px; }
-  .btn { display:inline-block; background:var(--green); color:#04120a; font-weight:bold; padding:8px 18px; border-radius:6px; font-size:14px; }
-  .btn:hover { background:var(--yellow); text-decoration:none; }
-  code { background:#0d150d; border:1px solid #223222; padding:2px 6px; border-radius:4px; font-size:13px; color:var(--yellow); }
-  pre { background:#0d150d; border:1px solid #223222; border-radius:8px; padding:14px; overflow-x:auto; font-size:12px; }
-  .warn { border:1px solid var(--red); background:#1a0d10; border-radius:8px; padding:14px; color:#ffb3ba; font-size:13px; }
-  footer { text-align:center; padding:30px 0 40px; color:var(--dim); font-size:12px; }
-  .hash { word-break:break-all; color:var(--green); }
+  :root{ --bg:#070b09; --panel:#0e1512; --panel2:#111c16; --green:#00e676; --green2:#00b368; --yellow:#ffd400; --red:#ff3d5a; --text:#d7e6da; --dim:#7f9b88; --line:#1c2a22; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ background:radial-gradient(1200px 600px at 80% -10%, #0d241a 0%, var(--bg) 55%); color:var(--text); font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; line-height:1.75; }
+  a{ color:var(--green); text-decoration:none; }
+  a:hover{ color:var(--yellow); }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 22px; }
+  header{ padding:26px 0 10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; border-bottom:1px solid var(--line); }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ width:46px; height:46px; border-radius:10px; }
+  .brand b{ font-size:19px; color:#fff; }
+  .brand small{ display:block; color:var(--dim); font-size:12px; }
+  nav a{ margin-left:20px; font-size:14px; color:var(--dim); }
+  nav a:hover{ color:var(--green); }
+  .hero{ display:grid; grid-template-columns:1.1fr 1fr; gap:30px; align-items:center; padding:44px 0 30px; }
+  .hero h1{ font-size:44px; color:#fff; letter-spacing:1px; }
+  .hero h1 span{ color:var(--green); }
+  .hero .tag{ color:var(--yellow); font-size:16px; margin:8px 0 6px; }
+  .hero .desc{ color:var(--dim); font-size:15px; }
+  .hero ul{ list-style:none; margin:16px 0 22px; }
+  .hero li{ padding:5px 0 5px 26px; position:relative; font-size:14px; color:var(--text); }
+  .hero li::before{ content:""; position:absolute; left:0; top:12px; width:9px; height:9px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+  .hero img{ width:100%; border-radius:14px; border:1px solid var(--line); box-shadow:0 18px 50px rgba(0,230,118,.10); }
+  .btn{ display:inline-block; background:var(--green); color:#04120a; font-weight:700; padding:10px 22px; border-radius:8px; font-size:14px; margin:4px 6px 4px 0; }
+  .btn:hover{ background:var(--yellow); color:#000; }
+  .btn.ghost{ background:transparent; border:1px solid var(--green); color:var(--green); }
+  section{ padding:36px 0; border-bottom:1px solid var(--line); }
+  h2{ color:var(--green); font-size:23px; margin-bottom:16px; }
+  h2::before{ content:"# "; color:var(--red); }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card h3{ color:var(--yellow); font-size:15px; margin-bottom:8px; }
+  .card p{ font-size:13px; color:var(--text); }
+  .dl{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .dl h3{ color:var(--green); font-size:15px; }
+  .dl p{ font-size:12.5px; color:var(--dim); }
+  .dl .size{ font-size:12px; color:var(--yellow); }
+  pre{ background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:16px; overflow-x:auto; font-size:12.5px; color:var(--yellow); }
+  .hash{ word-break:break-all; color:var(--green); }
+  .warn{ border:1px solid var(--red); background:#1a0d12; border-radius:10px; padding:16px; color:#ffb3ba; font-size:13.5px; }
+  .posters{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
+  .posters img{ width:100%; border-radius:12px; border:1px solid var(--line); }
+  footer{ text-align:center; padding:28px 0 42px; color:var(--dim); font-size:12px; }
+  @media (max-width:760px){ .hero{ grid-template-columns:1fr; } .posters{ grid-template-columns:1fr; } nav a{ margin-left:10px; } }
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="banner">
-<span style="color:#2fe04e">
-      _       _                                 
-  ___| |_ ___| |_ ___ _ __ _ __ ___  _   ___  __
- / _ \ __/ __| __/ _ \ '__| '_ ` _ \| | | \ \/ /
-|  __/ || (__| ||  __/ |  | | | | | | |_| |>  &lt; 
- \___|\__\___|\__\___\_|  |_| |_| |_|\__,_/_/\_\
-</span>
+  <div class="brand">
+    <img src="logo.png" alt="etctermux logo">
+    <div><b>etctermux</b><small>标识 com.termux.etc · 基于 Termux 深度定制</small></div>
   </div>
-  <h1>etctermux</h1>
-  <div class="tag">Kali 风格 · 白帽安全测试终端 · Android</div>
+  <nav>
+    <a href="#download">下载</a>
+    <a href="#features">功能</a>
+    <a href="#poster">宣传</a>
+    <a href="#verify">正版校验</a>
+    <a href="#license">许可协议</a>
+    <a href="#contact">联系</a>
+  </nav>
 </header>
 
-<nav>
-  <a href="#download">下载</a>
-  <a href="#features">功能</a>
-  <a href="#verify">正版校验</a>
-  <a href="#license">许可协议</a>
-  <a href="#contact">联系</a>
-</nav>
+<div class="hero">
+  <div>
+    <h1>etc<span>termux</span></h1>
+    <div class="tag">Kali 风格 · 白帽安全测试终端 · Android / 模拟器</div>
+    <p class="desc">基于 Termux 深度定制的白帽安全测试终端，内置 Kali 常用工具集并<b>离线预装、开箱即用</b>——安装后无需联网、无需再次安装，命令直接可用。</p>
+    <ul>
+      <li>内置 nmap / sqlmap / dirb / git / python / nodejs / npm 等工具，首次启动自动解压就绪</li>
+      <li>镜像源切换（清华 / 中科大 / 阿里云 / 北外 / 南大 / 官方）</li>
+      <li>sudo 模拟 root（proot/tsu，32/64 位与模拟器均可用）</li>
+      <li>左侧功能抽屉 · 右侧 AI 帮助面板（支持 OpenAI 兼容接口）</li>
+      <li>长按音量 + 打开左侧菜单 · 长按音量 - 打开右侧面板</li>
+      <li>版本更新检测 · 正版签名校验 · 中文界面</li>
+    </ul>
+    <a class="btn" href="#download">立即下载</a>
+    <a class="btn ghost" href="https://github.com/ETQWFD/etctermux" target="_blank">GitHub 源码</a>
+  </div>
+  <img src="poster_1920x1080.png" alt="etctermux 宣传图">
+</div>
 
 <section id="download">
-  <h2>下载 etctermux v1.2.0（内置离线工具包）</h2>
+  <h2>下载 etctermux v1.3.0（内置工具 · 开箱即用）</h2>
   <div class="dl">
-    <h3>arm64-v8a（64 位手机 · 推荐）</h3>
-    <p>适用于绝大多数现代 Android 手机。</p>
-    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.2.0/etctermux_1.2.0_arm64-v8a.apk">下载 APK</a>
+    <div><h3>arm64-v8a（64 位手机 · 推荐）</h3><p>适用于绝大多数现代 Android 手机。</p></div>
+    <span class="size">约 190 MB</span>
+    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.3.0/etctermux_1.3.0_arm64-v8a.apk">下载 APK</a>
   </div>
   <div class="dl">
-    <h3>armeabi-v7a（32 位手机）</h3>
-    <p>适用于较旧的 32 位 ARM 手机。</p>
-    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.2.0/etctermux_1.2.0_armeabi-v7a.apk">下载 APK</a>
+    <div><h3>armeabi-v7a（32 位手机）</h3><p>适用于较旧的 32 位 ARM 手机。</p></div>
+    <span class="size">约 170 MB</span>
+    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.3.0/etctermux_1.3.0_armeabi-v7a.apk">下载 APK</a>
   </div>
   <div class="dl">
-    <h3>x86_64 / x86（模拟器）</h3>
-    <p>适用于 Android 模拟器（64 位 / 32 位）。</p>
-    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.2.0/etctermux_1.2.0_x86_64.apk">x86_64</a>
-    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.2.0/etctermux_1.2.0_x86.apk" style="margin-left:8px">x86</a>
+    <div><h3>x86_64 / x86（模拟器）</h3><p>适用于 Android 模拟器（64 位 / 32 位）。</p></div>
+    <span class="size">约 190 MB</span>
+    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.3.0/etctermux_1.3.0_x86_64.apk">x86_64</a>
+    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.3.0/etctermux_1.3.0_x86.apk" style="margin-left:8px">x86</a>
   </div>
   <div class="dl">
-    <h3>universal（全 ABI 通用包）</h3>
-    <p>包含全部架构，体积较大，适合不确定架构时使用。</p>
-    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.2.0/etctermux_1.2.0_universal.apk">下载 APK</a>
+    <div><h3>universal（全 ABI 通用包）</h3><p>包含全部架构，体积较大，适合不确定架构时使用。</p></div>
+    <span class="size">约 720 MB</span>
+    <a class="btn" href="https://github.com/ETQWFD/etctermux/releases/download/v1.3.0/etctermux_1.3.0_universal.apk">下载 APK</a>
   </div>
-  <p style="font-size:13px;color:var(--dim)">全部版本也发布在 <a href="https://github.com/ETQWFD/etctermux/releases">GitHub Releases</a>。安装时请允许"安装未知应用"。</p>
+  <p style="font-size:13px;color:var(--dim)">全部版本也发布在 <a href="https://github.com/ETQWFD/etctermux/releases">GitHub Releases</a>。安装时请允许"安装未知应用"。包名说明：安装包系统包名保持 com.termux（与官方 Termux / ZeroTermux 一致，保证引导程序兼容）；项目标识为 com.termux.etc。</p>
 </section>
 
 <section id="features">
   <h2>功能特性</h2>
   <div class="grid">
-    <div class="card"><h3>Kali 风格命令行</h3><p>Kali 式提示符、彩色 ASCII 启动 banner，可自定义。</p></div>
-    <div class="card"><h3>左侧功能抽屉</h3><p>镜像源 / 工具菜单 / 更新 / 白帽网站 / sudo / 关于 一键直达，右侧 + 新建会话。</p></div>
-    <div class="card"><h3>镜像源切换</h3><p>清华、中科大、阿里云、北外、南大、官方源一键切换。</p></div>
-    <div class="card"><h3>安全工具集</h3><p>nmap、sqlmap、hydra、nikto、nuclei、metasploit 等分类一键安装，支持完整 Kali 环境。</p></div>
-    <div class="card"><h3>内置工具链</h3><p>首次启动自动安装 git / python / nodejs / npm / java 等。</p></div>
-    <div class="card"><h3>白帽学习网站</h3><p>OWASP、HackTheBox、TryHackMe、HackerOne、Vulhub 等一键打开。</p></div>
-    <div class="card"><h3>sudo root 模拟</h3><p>已 root 用真实 su，未 root 用 proot 模拟，32/64 位与模拟器均支持。</p></div>
-    <div class="card"><h3>版本更新检测</h3><p>自动检测最新版并按设备架构下载安装。</p></div>
-    <div class="card"><h3>正版签名校验</h3><p>非官方签名版本无法使用，自动提示并跳转官网。</p></div>
+    <div class="card"><h3>离线预装 · 开箱即用</h3><p>Kali 常用工具直接烘烤进安装包，首次启动自动解压就绪，无需联网、无需再次安装；仍可用 apt / pip 安装扩展。</p></div>
+    <div class="card"><h3>Kali 风格命令行</h3><p>Kali 式提示符、绿色 ASCII banner、自定义 bashrc，终端体验贴近 Kali Linux。</p></div>
+    <div class="card"><h3>左侧功能抽屉</h3><p>镜像源 / 工具菜单 / 更新 / 白帽网站 / sudo / 关于 一键直达；长按音量 + 快速打开。</p></div>
+    <div class="card"><h3>右侧 AI 帮助面板</h3><p>支持 OpenAI 兼容接口（OpenAI / DeepSeek / 本地 Ollama 等），自定义端点与 Key，长按音量 - 打开。</p></div>
+    <div class="card"><h3>镜像源切换</h3><p>清华 / 中科大 / 阿里云 / 北外 / 南大 / 官方源一键切换，apt 损坏自动修复（dpkg --configure -a）。</p></div>
+    <div class="card"><h3>内置工具链</h3><p>nmap、sqlmap、dirb、netcat、socat、dnsutils、whois、traceroute、openssh、git、python、nodejs、npm、proot、tsu 等。</p></div>
+    <div class="card"><h3>sudo root 模拟</h3><p>已 root 用真实 su，未 root 用 proot / fakeroot 模拟；32/64 位与模拟器均支持。</p></div>
+    <div class="card"><h3>白帽学习网站</h3><p>OWASP、HackTheBox、TryHackMe、HackerOne、Vulhub、补天、先知等一键打开。</p></div>
+    <div class="card"><h3>版本更新检测</h3><p>自动检测最新版并按设备架构下载安装到 termux_kali_etc 目录。</p></div>
+    <div class="card"><h3>正版签名校验</h3><p>非官方签名版本无法使用，自动提示并跳转官网；签名哈希见下方正版校验。</p></div>
+    <div class="card"><h3>共享存储</h3><p>自动创建 /storage/emulated/0/termux_kali_etc 目录，与系统文件互通。</p></div>
+    <div class="card"><h3>中文界面</h3><p>复制 / 粘贴 / 更多等菜单已汉化，主题为 Kali 绿深色风格。</p></div>
+  </div>
+</section>
+
+<section id="poster">
+  <h2>宣传图</h2>
+  <div class="posters">
+    <img src="poster_1920x1080.png" alt="横版宣传图">
+    <img src="poster_1080x1920.png" alt="竖版宣传图">
   </div>
 </section>
 
 <section id="verify">
   <h2>正版签名校验</h2>
-  <p>etctermux 启动时校验自身签名，与官网公布值不一致即为盗版/被篡改版本，将无法使用。请核对：</p>
+  <p>etctermux 启动时校验自身签名，与官网公布值不一致即为盗版 / 被篡改版本，将无法使用。请核对：</p>
   <pre>官方签名 SHA-256:
 <span class="hash">a08602c171dd9e1e6cba264e69c11284b55777922819d9f3750b9dbd8b1485bb</span></pre>
   <p>机器校验文件：<a href="/verify.json">verify.json</a>（应用内置校验也读取此文件）。</p>
@@ -114,19 +152,20 @@
 <section id="license">
   <h2>许可协议与免责声明</h2>
   <div class="warn">
-    <strong>重要声明</strong>：本软件为白帽安全测试与学习工具，仅限<b>授权环境</b>下使用。因使用本软件造成的任何损失，<b>etc 团队不负任何责任</b>。请遵守当地法律法规，切勿用于非法用途。
+    <strong>重要声明</strong>：本软件为白帽安全测试与学习工具，仅限<b>授权环境</b>下使用。因使用本软件造成的任何损失，<b>etc 团队不负任何责任</b>。请遵守当地法律法规，切勿用于非法用途。联系：<a href="mailto:2416444244@qq.com">2416444244@qq.com</a>
   </div>
-  <p style="margin-top:12px">应用基于 Termux（AGPL/GPLv3 兼容许可）二次开发，保留上游版权声明与许可。</p>
+  <p style="margin-top:12px">应用基于 Termux（GPLv3 兼容许可）二次开发，保留上游版权声明与许可。项目标识 com.termux.etc。</p>
 </section>
 
 <section id="contact">
   <h2>联系我们</h2>
   <p>邮箱：<a href="mailto:2416444244@qq.com">2416444244@qq.com</a></p>
-  <p>GitHub：<a href="https://github.com/ETQWFD/etctermux">github.com/ETQWFD/etctermux</a></p>
+  <p>GitHub：<a href="https://github.com/ETQWFD/etctermux" target="_blank">github.com/ETQWFD/etctermux</a></p>
+  <p>官网：<a href="https://etc.tw.kg">https://etc.tw.kg</a></p>
 </section>
 
 <footer>
-  © 2026 etc team · etctermux v1.2.0 · 仅限授权环境下的安全测试与学习
+  © 2026 etc team · etctermux v1.3.0 · 标识 com.termux.etc · 仅限授权环境下的安全测试与学习
 </footer>
 
 </div>
